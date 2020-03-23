@@ -11,11 +11,13 @@ class LoginController extends Controller
        return view('login');
    } 
 
-   public function doLogin()
+   public function doLogin(Request $request)
    {
-       $rules = [
-           'email' => 'required|email'
-       ];
+       $request->validate([
+           'email' => 'required|email',
+           'password' => 'required|alphaNum|min:3'
+       ]);
+
        return "Logado";
    }
 }

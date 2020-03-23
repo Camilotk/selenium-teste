@@ -19,7 +19,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        static::startChromeDriver();
+       // static::startChromeDriver();
     }
 
     /**
@@ -30,15 +30,31 @@ abstract class DuskTestCase extends BaseTestCase
     protected function driver()
     {
         $options = (new ChromeOptions)->addArguments([
-            '--disable-gpu',
             '--headless',
-            '--window-size=1920,1080',
+            '--disable-gpu',
+            '--no-sandbox',
+            '--ignore-certificate-errors',
         ]);
 
-        return RemoteWebDriver::create(
-            'http://localhost:9515', DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY, $options
-            )
+        $username = env('LT_USERNAME');
+        $access_key = env('LT_ACCESS_KEY');
+        $url = "https://".$username.":".$access_key."@hub.lambdatest.com/wd/hub";
+
+        return RemoteWebDriver::create($url, 
+            DesiredCapabilities::chrome()
+                ->setCapability(ChromeOptions::CAPABILITY, $options)
+                ->setCapability("platform", "win10")
+                ->setCapability("browserName", "chrome")
+                ->setCapability("version", "71.0")
+                ->setCapability("resolution", "1024x768")
+                ->setCapability("build", "LaravelDusk Build")
+                ->setCapability("name", "LaravelDusk Test")
+                ->setCapability("network", true)
+                ->setCapability("video", true)
+                ->setCapability("visual", true)
+                ->setCapability("console", true)
+                ->setCapability("tunnel", true)
+                ->setCapability('acceptInsecureCerts', true)
         );
     }
 }

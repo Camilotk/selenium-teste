@@ -16,14 +16,13 @@ class LoginTest extends DuskTestCase
     public function testExample()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('login')
-                    ->assertSee('Login')
-                    ->type('email', 'john.doe@lendflow.io')
-                    ->type('password', '123')
-                    ->press('Send')
-                    ->assertSee('Logado')
-                    ->pause(100)
-                    ->assertPathIs('/selenium-teste/public/index.php/logado');
+            $browser->visit('https://lambdatest.github.io/sample-todo-app/')
+                    ->assertTitleContains('Sample page - lambdatest.com')
+                    ->check("li1")
+                    ->check("li3")
+                    ->type("#sampletodotext", "Let's add new to do item")
+                    ->press('#addbutton');
+            sleep(10);;
         });
     }
 }
